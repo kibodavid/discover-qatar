@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discover Qatar: The 974 Challenge</title>
+    <title>Discover Qatar: The 9-7-4 Challenge</title>
     <style>
         :root {
             --qatar-maroon: #8D1B3D;
             --qatar-gold: #D4AF37;
-            --bg: #fdfafb;
-            --text: #333;
+            --correct-green: #28a745;
+            --wrong-red: #dc3545;
+            --bg: #f8f9fa;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg);
-            color: var(--text);
             margin: 0;
             display: flex;
             justify-content: center;
@@ -25,92 +25,62 @@
 
         .app-card {
             background: white;
-            width: 90%;
+            width: 95%;
             max-width: 500px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             overflow: hidden;
-            border-top: 8px solid var(--qatar-maroon);
+            border-top: 10px solid var(--qatar-maroon);
         }
 
         .header {
             background: var(--qatar-maroon);
             color: white;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
         }
 
-        .stats-bar {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 20px;
-            background: #f8f8f8;
-            font-size: 0.9rem;
-            font-weight: bold;
+        .progress-container {
+            background: #eee;
+            height: 8px;
+            width: 100%;
         }
 
-        .quiz-body {
-            padding: 30px;
+        #progress-bar {
+            background: var(--qatar-gold);
+            height: 100%;
+            width: 0%;
+            transition: 0.3s;
         }
+
+        .quiz-body { padding: 25px; }
 
         .question {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
             margin-bottom: 20px;
-            line-height: 1.4;
+            min-height: 50px;
         }
 
-        .options-list {
-            display: grid;
-            gap: 12px;
-        }
+        .options-list { display: grid; gap: 10px; }
 
         .option-btn {
-            padding: 15px;
+            padding: 14px;
             border: 2px solid #eee;
-            border-radius: 12px;
+            border-radius: 10px;
             background: white;
             cursor: pointer;
             text-align: left;
             font-size: 1rem;
-            transition: all 0.2s;
+            transition: 0.2s;
         }
 
-        .option-btn:hover:not(:disabled) {
-            border-color: var(--qatar-maroon);
-            background: #fff9fa;
-        }
+        /* Color States */
+        .correct { background: var(--correct-green) !important; color: white !important; border-color: var(--correct-green) !important; }
+        .wrong { background: var(--wrong-red) !important; color: white !important; border-color: var(--wrong-red) !important; }
+        .highlight { background: var(--qatar-gold) !important; color: white !important; border-color: var(--qatar-gold) !important; }
 
-        .correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724; }
-        .wrong { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; }
-
-        .explanation {
-            margin-top: 20px;
-            padding: 15px;
-            background: #fff9e6;
-            border-left: 5px solid var(--qatar-gold);
-            border-radius: 5px;
-            display: none;
-        }
-
-        .next-btn {
-            width: 100%;
-            padding: 15px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 12px;
-            background: var(--qatar-maroon);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            display: none;
-        }
-
-        .result-screen {
-            text-align: center;
-            padding: 40px 20px;
-            display: none;
-        }
-
+        .result-screen { text-align: center; padding: 40px 20px; display: none; }
         .hidden { display: none; }
     </style>
 </head>
@@ -118,159 +88,111 @@
 
 <div class="app-card">
     <div class="header">
-        <h2 style="margin:0">Discover Qatar</h2>
-        <small>The 974 Challenge</small>
+        <h3 style="margin:0">Qatar Tourism: The 9-7-4 Challenge</h3>
     </div>
+    <div class="progress-container"><div id="progress-bar"></div></div>
 
     <div id="game-container">
-        <div class="stats-bar">
-            <span id="progress-text">Question 1/9</span>
-            <span id="score-text">Score: 9/9</span>
-        </div>
-
+        <div style="padding:10px 25px; font-size: 0.7rem; font-weight:bold; color: var(--qatar-maroon); text-transform: uppercase; letter-spacing: 1px;" id="section-name">LANDMARKS</div>
         <div class="quiz-body">
-            <div id="question-text" class="question">Loading question...</div>
+            <div id="question-text" class="question"></div>
             <div id="options-container" class="options-list"></div>
-            
-            <div id="explanation-box" class="explanation">
-                <strong>Did you know?</strong><br>
-                <span id="explanation-content"></span>
-            </div>
-
-            <button id="next-btn" class="next-btn" onclick="nextQuestion()">Next Level →</button>
         </div>
     </div>
 
     <div id="result-screen" class="result-screen">
-        <h1 style="color: var(--qatar-maroon)">Mubarak!</h1>
-        <p id="final-stats"></p>
-        <p style="font-size: 0.9rem; color: #666">Pitch: Former Security Professional turned Tourism Ambassador.</p>
-        <button class="next-btn" style="display:block" onclick="location.reload()">Try for a Perfect Score</button>
+        <h2 style="color: var(--qatar-maroon)">Mission Complete</h2>
+        <p id="final-score" style="font-size: 1.5rem; font-weight:bold"></p>
+        <p>Expertise Certified for Qatar Tourism 2026.</p>
+        <button onclick="location.reload()" style="padding:12px 25px; background:var(--qatar-maroon); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:20px;">Restart Challenge</button>
     </div>
 </div>
 
 <script>
-    const questions = [
-        {
-            q: "What causes the 'Singing Sand Dunes' of Qatar to sing?",
-            options: ["Underground water pipes", "Friction between sand grains", "Wind in limestone caves", "Salt reflecting sound"],
-            correct: 1,
-            e: "As sand slides down, friction between grain sizes creates a low-frequency hum like a chant!"
-        },
-        {
-            q: "Which animal is the national symbol of the State of Qatar?",
-            options: ["Peregrine Falcon", "Arabian Oryx", "Dromedary Camel", "Arabian Horse"],
-            correct: 1,
-            e: "The Arabian Oryx (Al Maha) was once extinct in the wild but saved by Qatari conservation efforts."
-        },
-        {
-            q: "Geographically, Qatar is unique for being the second ______ country in the world.",
-            options: ["Smallest", "Flattest", "Most elevated", "Most forested"],
-            correct: 1,
-            e: "Qatar is incredibly flat; its highest point is only 103 meters above sea level!"
-        },
-        {
-            q: "What is unique about the 'Inland Sea' (Khor Al Adaid)?",
-            options: ["It is made of fresh water", "The sea meets the heart of the desert", "It has underwater ruins", "It's home to desert penguins"],
-            correct: 1,
-            e: "It is one of the few places on Earth where the ocean encroaches deep into the desert dunes."
-        },
-        {
-            q: "Which island was historically famous for producing rare purple dye?",
-            options: ["The Pearl-Qatar", "Purple Island (Bin Ghannam)", "Al Safliya Island", "Banana Island"],
-            correct: 1,
-            e: "In ancient times, dye was extracted here from sea snails for royal garments."
-        },
-        {
-            q: "What is 'Machboos', the national dish of Qatar?",
-            options: ["A sweet date dessert", "A spiced rice dish with meat/fish", "A traditional breakfast bread", "A street food wrap"],
-            correct: 1,
-            e: "It's a fragrant rice dish made with 'Bezar' spices and dried lime (Loomi)."
-        },
-        {
-            q: "In which year did Qatar host the first-ever winter FIFA World Cup?",
-            options: ["2018", "2022", "2020", "2024"],
-            correct: 1,
-            e: "The 2022 World Cup was the most compact and sustainable in history."
-        },
-        {
-            q: "What do the nine points on the Qatari flag represent?",
-            options: ["The 9 municipalities", "The 9th member of 'reconciled Emirates'", "9 months of pearl season", "9 founding tribes"],
-            correct: 1,
-            e: "The points signify Qatar becoming the 9th member of the reconciled Emirates in 1916."
-        },
-        {
-            q: "Which airport was named 'World’s Best' in 2024?",
-            options: ["Doha International", "Hamad International (HIA)", "Lusail Executive", "Al Khor Airfield"],
-            correct: 1,
-            e: "Hamad International is famous for 'The Orchard,' an indoor tropical garden."
-        }
+    const quizData = [
+        // 9 QUESTIONS: PLACES & LANDMARKS
+        { q: "Which museum is designed to look like a 'Desert Rose'?", options: ["MIA", "National Museum of Qatar", "Mathaf", "Fire Station"], correct: 1 },
+        { q: "Where can you find the Venice-inspired Qanat Quartier?", options: ["The Pearl-Qatar", "Msheireb", "Lusail", "Katara"], correct: 0 },
+        { q: "Which cultural village features a gold-tiled mosque and pigeon towers?", options: ["Souq Waqif", "Katara", "Aspire Zone", "Education City"], correct: 1 },
+        { q: "Which 'Smart City' hosted the 2022 World Cup Final?", options: ["Al Wakrah", "Dukhan", "Lusail City", "Al Rayyan"], correct: 2 },
+        { q: "Which market is the historic 'Standing Market' of Doha?", options: ["Souq Al Wakrah", "Souq Waqif", "Falcon Souq", "Omani Souq"], correct: 1 },
+        { q: "Where are the 'Singing Sand Dunes' located?", options: ["Al Khor", "Southwest of Doha", "Zekreet", "Lusail"], correct: 1 },
+        { q: "Which man-made island is shaped like a pearl necklace?", options: ["Purple Island", "Banana Island", "The Pearl-Qatar", "Al Safliya"], correct: 2 },
+        { q: "The Aspire Tower is commonly known by what name?", options: ["Burj Doha", "The Torch", "Al Bidda Tower", "Lusail Plaza"], correct: 1 },
+        { q: "What is Qatar's UNESCO World Heritage site?", options: ["Al Zubarah Fort", "Barzan Towers", "Zekreet", "Khor Al Adaid"], correct: 0 },
+
+        // 7 QUESTIONS: CULTURE & HOSPITALITY (Vice-Versa Focus)
+        { q: "What is the primary ingredient used to flavor Qatari 'Loomi' in dishes?", options: ["Fresh Mint", "Dried Black Lime", "Saffron", "Cinnamon"], correct: 1 },
+        { q: "A guest is served Arabic coffee. Which hand should they use to take it?", options: ["The Left Hand", "The Right Hand", "Both Hands", "Whichever is free"], correct: 1 },
+        { q: "Traditional Qatari Dhows were primarily used for which industry?", options: ["Oil Transport", "Pearling and Fishing", "Racing", "Cattle transport"], correct: 1 },
+        { q: "What is the 'unofficial' national drink served in every street corner?", options: ["Gahwa", "Karak", "Mint Lemonade", "Red Tea"], correct: 1 },
+        { q: "In Qatari hospitality, if you don't want more coffee, you should:", options: ["Cover the cup with your hand", "Gently jiggle/shake the cup", "Place the cup upside down", "Stand up"], correct: 1 },
+        { q: "What is the spiced rice and meat dish considered the national staple?", options: ["Shawarma", "Machboos", "Hummus", "Tabouleh"], correct: 1 },
+        { q: "Which bird represents the soul of Qatari heritage and hunting?", options: ["Oryx", "Falcon", "Eagle", "Camel"], correct: 1 },
+
+        // 4 TRUE/FALSE: TOURISM 2026
+        { q: "True or False: Qatar 2026 is officially the safest country in the world for tourists.", options: ["True", "False"], correct: 0 },
+        { q: "True or False: Visa-free entry is available for over 100 countries in 2026.", options: ["True", "False"], correct: 0 },
+        { q: "True or False: In 2026, visitors can travel to all stadiums via the Doha Metro.", options: ["True", "False"], correct: 0 },
+        { q: "True or False: Qatar is ranked as the flattest country on Earth.", options: ["True", "False"], correct: 1 } // False (It is 2nd flattest)
     ];
 
     let currentIdx = 0;
-    let totalPoints = 9;
-    let firstAttempt = true;
+    let score = 0;
+    let canClick = true;
+    let firstTry = true;
 
-    function loadQuestion() {
-        const data = questions[currentIdx];
-        document.getElementById("progress-text").innerText = `Question ${currentIdx + 1}/9`;
+    function initQuiz() {
+        const data = quizData[currentIdx];
+        const sectionName = currentIdx < 9 ? "LANDMARKS" : (currentIdx < 16 ? "CULTURE & HOSPITALITY" : "DESTINATION 2026");
+        document.getElementById("section-name").innerText = sectionName;
         document.getElementById("question-text").innerText = data.q;
-        document.getElementById("explanation-box").style.display = "none";
-        document.getElementById("next-btn").style.display = "none";
+        document.getElementById("progress-bar").style.width = `${(currentIdx / 20) * 100}%`;
         
         const container = document.getElementById("options-container");
         container.innerHTML = "";
-        firstAttempt = true;
+        canClick = true;
+        firstTry = true;
 
         data.options.forEach((opt, i) => {
             const btn = document.createElement("button");
             btn.className = "option-btn";
             btn.innerText = opt;
-            btn.onclick = () => checkAns(i, btn);
+            btn.onclick = () => handleChoice(i, btn);
             container.appendChild(btn);
         });
     }
 
-    function checkAns(idx, btn) {
-        const data = questions[currentIdx];
+    function handleChoice(idx, btn) {
+        if (!canClick) return;
+        const data = quizData[currentIdx];
+        
         if (idx === data.correct) {
             btn.classList.add("correct");
-            document.getElementById("explanation-content").innerText = data.e;
-            document.getElementById("explanation-box").style.display = "block";
-            document.getElementById("next-btn").style.display = "block";
-            
-            // Disable all buttons
-            const allBtns = document.querySelectorAll(".option-btn");
-            allBtns.forEach(b => b.disabled = true);
+            if (firstTry) score++;
+            canClick = false;
+
+            setTimeout(() => {
+                currentIdx++;
+                if (currentIdx < quizData.length) initQuiz();
+                else finishGame();
+            }, 800); // Fast 0.8s transition
         } else {
-            if (firstAttempt) {
-                totalPoints--;
-                document.getElementById("score-text").innerText = `Score: ${totalPoints}/9`;
-                firstAttempt = false;
-            }
             btn.classList.add("wrong");
-            btn.disabled = true;
+            firstTry = false;
+            const btns = document.querySelectorAll(".option-btn");
+            btns[data.correct].classList.add("highlight");
         }
     }
 
-    function nextQuestion() {
-        currentIdx++;
-        if (currentIdx < questions.length) {
-            loadQuestion();
-        } else {
-            showResults();
-        }
-    }
-
-    function showResults() {
+    function finishGame() {
         document.getElementById("game-container").classList.add("hidden");
-        const screen = document.getElementById("result-screen");
-        screen.style.display = "block";
-        document.getElementById("final-stats").innerText = `Final Accuracy Score: ${totalPoints}/9`;
+        document.getElementById("result-screen").style.display = "block";
+        document.getElementById("final-score").innerText = `${score} / 20`;
+        document.getElementById("progress-bar").style.width = `100%`;
     }
 
-    loadQuestion();
+    initQuiz();
 </script>
-
 </body>
 </html>
