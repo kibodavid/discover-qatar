@@ -10,7 +10,9 @@
         .app-card { background: white; width: 92%; max-width: 450px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-top: 10px solid var(--maroon); overflow: hidden; position: relative; }
         .header { background: var(--maroon); color: white; padding: 20px; text-align: center; }
         .quiz-body { padding: 30px; }
-        .section-tag { color: var(--maroon); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .hud { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-tag { color: var(--maroon); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .progress-text { font-size: 0.85rem; font-weight: bold; color: var(--gold); }
         .question { font-size: 1.2rem; font-weight: 600; margin-bottom: 25px; line-height: 1.4; color: #333; }
         .options { display: grid; gap: 12px; }
         .opt-btn { padding: 16px; border: 2px solid #eee; border-radius: 12px; background: white; cursor: pointer; text-align: left; font-size: 1rem; transition: 0.2s; }
@@ -18,14 +20,12 @@
         .wrong { background: var(--red) !important; color: white !important; border-color: var(--red) !important; }
         .highlight { background: var(--gold) !important; color: white !important; border-color: var(--gold) !important; }
         
-        /* Milestone Screen Styles */
         .milestone-screen { display: none; text-align: center; padding: 40px 25px; background: white; }
         .milestone-icon { font-size: 50px; margin-bottom: 15px; }
-        .action-btn { background: var(--maroon); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1rem; }
+        .action-btn { background: var(--maroon); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1.1rem; }
         
         .progress-container { height: 6px; background: #eee; width: 100%; }
         .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: 0.5s; }
-        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -36,7 +36,10 @@
 
     <div id="game-ui">
         <div class="quiz-body">
-            <div id="sect-label" class="section-tag"></div>
+            <div class="hud">
+                <div id="sect-label" class="section-tag"></div>
+                <div id="prog-count" class="progress-text"></div>
+            </div>
             <div id="q-text" class="question"></div>
             <div id="opt-container" class="options"></div>
         </div>
@@ -47,14 +50,14 @@
         <h2 id="milestone-title">Section Complete!</h2>
         <p id="milestone-msg"></p>
         <div style="font-size: 1.5rem; font-weight: bold; color: var(--maroon); margin: 15px 0;" id="current-score-display"></div>
-        <button class="action-btn" onclick="startNextSection()">Continue to Next Section →</button>
+        <button class="action-btn" id="next-sect-btn">Continue to Next Section →</button>
     </div>
 
     <div id="final-ui" class="milestone-screen">
         <div class="milestone-icon">🇶🇦</div>
         <h2 style="color: var(--maroon)">Mubarak!</h2>
         <p>You have mastered the 9-7-4 Qatar Challenge.</p>
-        <div style="font-size: 2rem; font-weight: bold; color: var(--gold);" id="final-score-display"></div>
+        <div style="font-size: 2.5rem; font-weight: bold; color: var(--gold);" id="final-score-display"></div>
         <button class="action-btn" onclick="location.reload()">Restart Experience</button>
     </div>
 </div>
@@ -92,25 +95,54 @@ let curIdx = 0;
 let totalScore = 0;
 let isClickable = true;
 let isFirstTry = true;
+let inMilestone = false;
+
+// Attach persistent event listener for the Milestone button
+document.getElementById("next-sect-btn").addEventListener("click", () => {
+    inMilestone = false;
+    updateUI();
+});
 
 function updateUI() {
+    if (inMilestone) return;
+
     const data = quizData[curIdx];
-    document.getElementById("fill").style.width = (curIdx / 20 * 100) + "%";
     
-    // Check for Section Transitions
-    if (curIdx === 9 && document.getElementById("milestone-ui").style.display !== "block") {
-        showMilestone("The 9 Landmarks Complete!", "Great job! You've mastered the geography. Ready for 'The 7' Cultural traditions?");
+    // Milestone Check
+    if (curIdx === 9 && !inMilestone) {
+        showMilestone("The 9 Landmarks Complete!", "Geography Mastered! Ready for 'The 7' Cultural traditions?");
         return;
     }
-    if (curIdx === 16 && document.getElementById("milestone-ui").style.display !== "block") {
-        showMilestone("The 7 Traditions Complete!", "Your cultural knowledge is excellent. Ready for the final '4' Vision 2026 questions?");
+    if (curIdx === 16 && !inMilestone) {
+        showMilestone("The 7 Traditions Complete!", "Culture Mastered! Ready for the final '4' Vision 2026 questions?");
         return;
     }
 
     document.getElementById("game-ui").style.display = "block";
     document.getElementById("milestone-ui").style.display = "none";
     
-    document.getElementById("sect-label").innerText = curIdx < 9 ? "Section 1: The 9 Landmarks" : (curIdx < 16 ? "Section 2: The 7 Traditions" : "Section 3: The 4 Vision");
+    // Set Section Labels and Progress Count
+    let sectLabel = "";
+    let progNum = 0;
+    let sectTotal = 0;
+
+    if (curIdx < 9) {
+        sectLabel = "Section 1: Landmarks";
+        progNum = curIdx + 1;
+        sectTotal = 9;
+    } else if (curIdx < 16) {
+        sectLabel = "Section 2: Culture";
+        progNum = curIdx - 8;
+        sectTotal = 7;
+    } else {
+        sectLabel = "Section 3: Vision 2026";
+        progNum = curIdx - 15;
+        sectTotal = 4;
+    }
+
+    document.getElementById("sect-label").innerText = sectLabel;
+    document.getElementById("prog-count").innerText = `${progNum} / ${sectTotal}`;
+    document.getElementById("fill").style.width = (progNum / sectTotal * 100) + "%";
     document.getElementById("q-text").innerText = data.q;
     
     const container = document.getElementById("opt-container");
@@ -154,17 +186,12 @@ function handleChoice(idx, btn) {
 }
 
 function showMilestone(title, msg) {
+    inMilestone = true;
     document.getElementById("game-ui").style.display = "none";
-    const milestone = document.getElementById("milestone-ui");
-    milestone.style.display = "block";
+    document.getElementById("milestone-ui").style.display = "block";
     document.getElementById("milestone-title").innerText = title;
     document.getElementById("milestone-msg").innerText = msg;
     document.getElementById("current-score-display").innerText = `Current Score: ${totalScore}/${curIdx}`;
-}
-
-function startNextSection() {
-    document.getElementById("milestone-ui").style.display = "none";
-    updateUI();
 }
 
 function showFinal() {
