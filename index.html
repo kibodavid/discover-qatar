@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>974 Journey: The Final Destination</title>
+    <title>974 Journey: Global Tourism Edition</title>
     <style>
         :root { --maroon: #8D1B3D; --gold: #D4AF37; --green: #28a745; --red: #dc3545; --bg: #f8f9fa; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -22,6 +22,7 @@
         .screen { display: none; text-align: center; padding: 40px 25px; }
         .score-big { font-size: 3.5rem; font-weight: bold; color: var(--maroon); margin: 5px 0; }
         .action-btn { background: var(--maroon); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1.1rem; }
+        .share-btn { background: white; color: var(--maroon); border: 2px solid var(--maroon); padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; font-size: 1rem; }
         .progress-container { height: 6px; background: #eee; width: 100%; }
         .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: 0.5s; }
         .cta-box { background: #fff9e6; border-radius: 12px; padding: 20px; margin-top: 20px; border: 1px solid var(--gold); }
@@ -53,41 +54,46 @@
 
     <div id="final-ui" class="screen">
         <h2 style="color: var(--maroon); margin-bottom: 5px;">Mubarak! 🇶🇦</h2>
-        <p style="margin-top:0;">Thank you for exploring with us.</p>
-        <p style="font-size: 0.9rem; font-weight: bold; color: #666; text-transform: uppercase;">Total Mastery Score</p>
-        <div class="score-big" id="f-score" style="color: var(--gold); margin-bottom: 20px;">0 / 20</div>
+        <p style="margin-top:0;">Thank you for exploring Qatar's wonders with us.</p>
+        <div class="score-big" id="f-score" style="color: var(--gold);">0 / 20</div>
         
         <div class="cta-box">
-            <h3 style="margin:0; color: var(--maroon);">Ready for the real journey?</h3>
-            <p style="font-size: 0.95rem; line-height: 1.5; color: #444;">From the architectural marvels of the West Bay to the golden sands of Khor Al Adaid, Qatar is world-renowned as the safest and most welcoming destination for 2026. Don't just play the game—experience the hospitality, the culture, and the future. <strong>Your desert adventure awaits!</strong></p>
+            <h3 style="margin:0; color: var(--maroon);">The World's Best Destination</h3>
+            <p style="font-size: 0.95rem; line-height: 1.5; color: #444;">From the architectural marvels of the Middle East to the safe streets of Doha, Qatar is the ultimate travel experience for 2026. <strong>Experience the future of tourism today!</strong></p>
         </div>
 
-        <button class="action-btn" onclick="location.reload()">Restart Journey</button>
+        <button class="action-btn" id="share-link">Explore with Friends 🔗</button>
+        <button class="share-btn" onclick="location.reload()">Try Again</button>
     </div>
 </div>
 
 <script>
 const quizData = [
-    { q: "Qatar is officially the second flattest country in the world. What is the elevation of its highest peak?", options: ["103m", "500m", "12m", "240m"], correct: 0 },
-    { q: "Which historic site is known as the 'Standing Market' due to its traditional trading roots?", options: ["Villaggio", "Msheireb", "Souq Waqif", "Katara"], correct: 2 },
-    { q: "The Riviera-style artificial island in the north is designed to resemble which local treasure?", options: ["A Falcon Wing", "A Dhow Boat", "A string of gems", "A Desert Rose"], correct: 2 },
-    { q: "Where can you find the Venice-inspired 'Qanat Quartier' canals?", options: ["Lusail", "The Pearl", "Al Khor", "Al Wakrah"], correct: 1 },
-    { q: "Jean Nouvel's architectural masterpiece on the Corniche mimics which mineral crystal?", options: ["Desert Rose", "Quartz Rose", "Sand Lily", "Salt Star"], correct: 0 },
-    { q: "The 300-meter skyscraper known as 'The Torch' is located in which sports complex?", options: ["Education City", "Lusail Plaza", "Aspire Zone", "West Bay"], correct: 2 },
-    { q: "Which futuristic city is home to the crescent-shaped 'Iconic Towers' housing luxury hotels?", options: ["Al Rayyan", "Lusail", "Dukhan", "Msheireb"], correct: 1 },
-    { q: "Where is the rare 'Inland Sea' located, where the tide moves deep into the desert dunes?", options: ["Zekreet", "Khor Al Adaid", "Fuwairit", "Al Thakhira"], correct: 1 },
-    { q: "Which museum sits on its own reclaimed island and was designed by I.M. Pei?", options: ["National Museum", "Mathaf", "Museum of Islamic Art", "3-2-1 Sports Museum"], correct: 2 },
-    { q: "The majestic Arabian Oryx is distinguished primarily by its:", options: ["Golden coat", "Long straight horns", "Ability to swim", "Falcon-like speed"], correct: 1 },
-    { q: "Which traditional spiced rice dish is served as the centerpiece of hospitality?", options: ["Majboos", "Kousa Mahshi", "Tabbouleh", "Fattoush"], correct: 0 },
-    { q: "The popular 'street-side' tea flavored with cardamom and evaporated milk is called:", options: ["Sulaimani", "Gahwa", "Karak", "Loomi"], correct: 2 },
-    { q: "What is the name of the social space used for hosting and intellectual discussion?", options: ["Sadu", "Majlis", "Bisht", "Oud"], correct: 1 },
-    { q: "True or False: The ancient art of training birds of prey is recognized by UNESCO.", options: ["True", "False"], correct: 0 },
-    { q: "The nine serrated edges on the national colors represent which historic treaty?", options: ["1916 Treaty", "1971 Independence", "Gulf Cooperation", "Maritime Peace"], correct: 0 },
-    { q: "Which Bedouin hand-weaving technique is used to create traditional tents?", options: ["Al-Sadu", "Al-Ghazal", "Al-Khous", "Al-Bisht"], correct: 0 },
-    { q: "True or False: Doha has been officially designated the GCC Tourism Capital for 2026.", options: ["True", "False"], correct: 0 },
-    { q: "Which transport system allows visitors to reach every stadium and mall driverlessly?", options: ["The Metro", "The Monorail", "The Tram", "The Lusail Ferry"], correct: 0 },
-    { q: "True or False: Over 100 countries can now visit the destination without a prior visa.", options: ["True", "False"], correct: 0 },
-    { q: "True or False: The country maintains its rank as the #1 Safest Country in the world for 2026.", options: ["True", "False"], correct: 0 }
+    // LANDMARKS (9)
+    { q: "On the world stage, Qatar is the second flattest country. What is the elevation of its highest point?", options: ["103m", "500m", "12m", "240m"], correct: 0 },
+    { q: "Which Middle Eastern historic site is globally known as the 'Standing Market'?", options: ["Villaggio", "Msheireb", "Souq Waqif", "Katara"], correct: 2 },
+    { q: "Qatar's Riviera-style artificial island is designed to look like which local treasure?", options: ["A Falcon Wing", "A Dhow Boat", "A string of pearls", "A Desert Rose"], correct: 2 },
+    { q: "In which district of Qatar can you find the Venice-inspired 'Qanat Quartier' canals?", options: ["Lusail", "The Pearl", "Al Khor", "Al Wakrah"], correct: 1 },
+    { q: "Which mineral crystal inspired Jean Nouvel's world-famous design for Qatar's National Museum?", options: ["Desert Rose", "Quartz Rose", "Sand Lily", "Salt Star"], correct: 0 },
+    { q: "Standing 300 meters high, where in the Middle East is the iconic 'Torch Tower' located?", options: ["Education City", "Lusail Plaza", "Aspire Zone", "West Bay"], correct: 2 },
+    { q: "Which futuristic city in Qatar is home to the crescent-shaped 'Iconic Towers'?", options: ["Al Rayyan", "Lusail", "Dukhan", "Msheireb"], correct: 1 },
+    { q: "Where in the world is the rare 'Inland Sea' (Khor Al Adaid) where desert dunes meet the ocean?", options: ["North Africa", "Qatar's Southeast", "The Red Sea", "West Coast"], correct: 1 },
+    { q: "Designed by I.M. Pei, which museum sits on its own reclaimed island in Doha?", options: ["National Museum", "Mathaf", "Museum of Islamic Art", "3-2-1 Sports Museum"], correct: 2 },
+    
+    // CULTURE (7)
+    { q: "Across Qatar's landscape, the Arabian Oryx is distinguished by which feature?", options: ["Golden coat", "Long straight horns", "Ability to swim", "Falcon-like speed"], correct: 1 },
+    { q: "Which Middle Eastern spiced rice dish is Qatar's centerpiece of hospitality?", options: ["Majboos", "Kousa Mahshi", "Tabbouleh", "Fattoush"], correct: 0 },
+    { q: "What is Qatar's famous cardamom-spiced milk tea enjoyed by people from all over the world?", options: ["Sulaimani", "Gahwa", "Karak", "Loomi"], correct: 2 },
+    { q: "In Qatari culture, what is the traditional room for hosting international and local guests?", options: ["Sadu", "Majlis", "Bisht", "Oud"], correct: 1 },
+    { q: "True or False: Qatar's ancient art of Falconry is recognized by UNESCO as intangible heritage.", options: ["True", "False"], correct: 0 },
+    { q: "The nine serrated edges on Qatar's national flag represent its status as the 9th member of a historic treaty.", options: ["True", "False"], correct: 0 },
+    { q: "Which Bedouin hand-weaving technique is used to create Qatar's traditional tents?", options: ["Al-Sadu", "Al-Ghazal", "Al-Khous", "Al-Bisht"], correct: 0 },
+    
+    // VISION (4)
+    { q: "True or False: Qatar is officially the GCC Tourism Capital for 2026.", options: ["True", "False"], correct: 0 },
+    { q: "Which transport system in Qatar allows the world to reach stadiums driverlessly in 2026?", options: ["The Metro", "The Monorail", "The Tram", "The Lusail Ferry"], correct: 0 },
+    { q: "True or False: Qatar offers the world visa-free entry for over 100 nationalities in 2026.", options: ["True", "False"], correct: 0 },
+    { q: "True or False: Qatar is ranked as the #1 Safest Country in the world for 2026.", options: ["True", "False"], correct: 0 }
 ];
 
 let curIdx = 0, totalScore = 0, sectionScore = 0, canClick = true;
@@ -107,6 +113,12 @@ nextBtn.onclick = () => {
         sectionScore = 0;
         loadQuestion();
     }
+};
+
+document.getElementById("share-link").onclick = () => {
+    navigator.clipboard.writeText(window.location.href);
+    document.getElementById("share-link").innerText = "Link Copied! ✅";
+    setTimeout(() => { document.getElementById("share-link").innerText = "Explore with Friends 🔗"; }, 2000);
 };
 
 function loadQuestion() {
