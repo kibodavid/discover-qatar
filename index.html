@@ -3,119 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>974 Elite: Tourism Challenge</title>
+    <title>Qatar 974: Milestone Challenge</title>
     <style>
-        :root { --maroon: #8D1B3D; --gold: #D4AF37; --green: #28a745; --red: #dc3545; --bg: #0b0b0b; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: white; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-        .app-card { background: #1a1a1a; width: 95%; max-width: 450px; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid #333; position: relative; }
-        .progress-bar { height: 4px; background: var(--gold); width: 0%; transition: 0.4s; position: absolute; top: 0; }
+        :root { --maroon: #8D1B3D; --gold: #D4AF37; --green: #28a745; --red: #dc3545; --bg: #fdfafb; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .app-card { background: white; width: 92%; max-width: 450px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-top: 10px solid var(--maroon); overflow: hidden; position: relative; }
+        .header { background: var(--maroon); color: white; padding: 20px; text-align: center; }
         .quiz-body { padding: 30px; }
-        .section-tag { color: var(--gold); font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; opacity: 0.7; }
-        .question { font-size: 1.2rem; font-weight: 500; margin-bottom: 25px; line-height: 1.5; color: #eee; }
+        .section-tag { color: var(--maroon); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .question { font-size: 1.2rem; font-weight: 600; margin-bottom: 25px; line-height: 1.4; color: #333; }
         .options { display: grid; gap: 12px; }
-        .opt-btn { padding: 16px; border: 1px solid #333; border-radius: 8px; background: #252525; color: #ccc; cursor: pointer; text-align: left; font-size: 0.95rem; transition: 0.2s; }
-        .opt-btn:hover:not(:disabled) { border-color: var(--gold); background: #2d2d2d; }
+        .opt-btn { padding: 16px; border: 2px solid #eee; border-radius: 12px; background: white; cursor: pointer; text-align: left; font-size: 1rem; transition: 0.2s; }
         .correct { background: var(--green) !important; color: white !important; border-color: var(--green) !important; }
         .wrong { background: var(--red) !important; color: white !important; border-color: var(--red) !important; }
-        .highlight { background: var(--gold) !important; color: black !important; border-color: var(--gold) !important; font-weight: bold; }
-        .result-screen { text-align: center; padding: 50px 20px; display: none; }
-        .score-circle { width: 100px; height: 100px; border: 5px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 1.5rem; font-weight: bold; }
+        .highlight { background: var(--gold) !important; color: white !important; border-color: var(--gold) !important; }
+        
+        /* Milestone Screen Styles */
+        .milestone-screen { display: none; text-align: center; padding: 40px 25px; background: white; }
+        .milestone-icon { font-size: 50px; margin-bottom: 15px; }
+        .action-btn { background: var(--maroon); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1rem; }
+        
+        .progress-container { height: 6px; background: #eee; width: 100%; }
+        .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: 0.5s; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="app-card">
-    <div class="progress-bar" id="pbar"></div>
-    <div id="game">
+    <div class="header"><h2 style="margin:0">The 974 Journey</h2></div>
+    <div class="progress-container"><div class="progress-fill" id="fill"></div></div>
+
+    <div id="game-ui">
         <div class="quiz-body">
-            <div id="sect" class="section-tag">Section 1/3</div>
-            <div id="qtext" class="question">Generating...</div>
-            <div id="opts" class="options"></div>
+            <div id="sect-label" class="section-tag"></div>
+            <div id="q-text" class="question"></div>
+            <div id="opt-container" class="options"></div>
         </div>
     </div>
-    <div id="result" class="result-screen">
-        <div class="score-circle" id="fscore">0</div>
-        <h3>CHALLENGE COMPLETE</h3>
-        <p id="feedback">Tourism Ambassador Level</p>
-        <button onclick="location.reload()" style="background:var(--maroon); color:white; border:none; padding:12px 30px; border-radius:5px; cursor:pointer; margin-top:20px;">RESTART</button>
+
+    <div id="milestone-ui" class="milestone-screen">
+        <div class="milestone-icon">🏆</div>
+        <h2 id="milestone-title">Section Complete!</h2>
+        <p id="milestone-msg"></p>
+        <div style="font-size: 1.5rem; font-weight: bold; color: var(--maroon); margin: 15px 0;" id="current-score-display"></div>
+        <button class="action-btn" onclick="startNextSection()">Continue to Next Section →</button>
+    </div>
+
+    <div id="final-ui" class="milestone-screen">
+        <div class="milestone-icon">🇶🇦</div>
+        <h2 style="color: var(--maroon)">Mubarak!</h2>
+        <p>You have mastered the 9-7-4 Qatar Challenge.</p>
+        <div style="font-size: 2rem; font-weight: bold; color: var(--gold);" id="final-score-display"></div>
+        <button class="action-btn" onclick="location.reload()">Restart Experience</button>
     </div>
 </div>
 
 <script>
-const data = [
-    // 9 LANDMARKS (Obscure Facts)
-    { q: "Jean Nouvel's National Museum design isn't just a flower; it mimics which specific crystalline form?", options: ["Desert Rose Gypsum", "Aragonite Cluster", "Calcite Petals", "Quartz Sandrose"], correct: 0 },
-    { q: "Which 2022 venue was the first to achieve a 5-star GSAS design and build rating?", options: ["Stadium 974", "Lusail Stadium", "Education City Stadium", "Al Janoub"], correct: 2 },
-    { q: "The Richard Serra sculpture 'East-West/West-East' in Zekreet consists of how many steel plates?", options: ["Three", "Four", "Five", "Six"], correct: 1 },
-    { q: "What is the specific name of the pigeon towers' traditional cooling technique in Katara?", options: ["Badgir", "Barjeel", "Al-Sadu Ventilation", "Dhow Draft"], correct: 1 },
-    { q: "Msheireb Downtown Doha holds which global record for sustainable development?", options: ["Largest LEED Platinum area", "Oldest solar-powered city", "Most driverless cars", "Tallest smart tower"], correct: 0 },
-    { q: "The iconic Katara Towers (Raffles/Fairmont) are designed to represent what symbol on the Qatari seal?", options: ["The Falcon", "The Dhow", "Crossed Scimitars", "The Palm Tree"], correct: 2 },
-    { q: "Bin Ghannam Island's dye was produced from which specific mollusk species?", options: ["Murex Snails", "Oyster Pearls", "Conch Shells", "Cuttlefish"], correct: 0 },
-    { q: "The Jassasiya Petroglyphs are unique for carvings that resemble which ancient game?", options: ["Chess", "Mancala (Al-Ailah)", "Backgammon", "Senet"], correct: 1 },
-    { q: "The Inland Sea (Khor Al Adaid) is a 'Sabkha' ecosystem. What does this mean?", options: ["Freshwater lagoon", "Moving sand island", "Supratidal salt flat", "Underwater cave"], correct: 2 },
+const quizData = [
+    // THE 9: LANDMARKS
+    { q: "What is the capital city of Qatar?", options: ["Doha", "Al Wakrah", "Lusail", "Al Khor"], correct: 0 },
+    { q: "Which market is the historic 'Standing Market' of Doha?", options: ["Mall of Qatar", "Souq Waqif", "Villaggio", "City Center"], correct: 1 },
+    { q: "The 'Pearl-Qatar' is which type of landmark?", options: ["Mountain", "Museum", "Man-made Island", "Forest"], correct: 2 },
+    { q: "Hamad International Airport is world-famous. Where is it?", options: ["Doha", "Dukhan", "Al Khor", "Zekreet"], correct: 0 },
+    { q: "The National Museum of Qatar is designed after what?", options: ["A Falcon", "A Desert Rose", "A Dhow Boat", "A Pearl"], correct: 1 },
+    { q: "The 'Torch Tower' is the centerpiece of which area?", options: ["The Pearl", "Aspire Zone", "Msheireb", "Lusail"], correct: 1 },
+    { q: "Which city hosted the 2022 World Cup Final?", options: ["Al Rayyan", "Doha", "Lusail", "Al Wakrah"], correct: 2 },
+    { q: "Where can you walk the beautiful waterfront crescent of Doha?", options: ["The Corniche", "Industrial Area", "Education City", "Zekreet"], correct: 0 },
+    { q: "The Museum of Islamic Art (MIA) was designed by whom?", options: ["Jean Nouvel", "I.M. Pei", "Zaha Hadid", "Rem Koolhaas"], correct: 1 },
 
-    // 7 CULTURE (Vice-Versa / Etiquette)
-    { q: "If you are serving Gahwa (coffee), in which order do you serve the room?", options: ["Oldest to youngest", "Right to left", "Left to right", "Most important guest first"], correct: 3 },
-    { q: "The national dish 'Machboos' is traditionally distinguished from other rice dishes by the use of:", options: ["Bezar spice and Loomi", "Coconut milk", "Only camel meat", "Raw ginger"], correct: 0 },
-    { q: "To signal you have finished your coffee and don't want a refill, you should:", options: ["Turn the cup upside down", "Place your thumb over the top", "Gently tilt/jiggle the cup", "Hand it back with both hands"], correct: 2 },
-    { q: "What is the historical reason for the 9 points on the flag?", options: ["The 9 tribes", "The 1916 Treaty", "The 9 municipalities", "The 9 months of pearl season"], correct: 1 },
-    { q: "Which Qatari tradition, 'Garangao', is celebrated on the 14th night of Ramadan?", options: ["A communal feast", "A poetry contest", "A children's festival", "A camel race"], correct: 2 },
-    { q: "The 'Bukhari' style of incense burner used in homes is primarily for:", options: ["Cleansing water", "Hospitality/Welcoming", "Religious prayer", "Insect repellent"], correct: 1 },
-    { q: "Historical pearl divers used 'Fatam' during their dives. What was this?", options: ["A heavy stone weight", "A nose clip", "A hand-woven basket", "A protective suit"], correct: 1 },
+    // THE 7: CULTURE
+    { q: "What is the national animal of Qatar?", options: ["Camel", "Arabian Oryx", "Falcon", "Sand Cat"], correct: 1 },
+    { q: "Which spiced rice dish is the national pride of Qatar?", options: ["Kabsa", "Machboos", "Biryani", "Shawarma"], correct: 1 },
+    { q: "What is the popular milk tea found everywhere in Qatar?", options: ["Karak", "Green Tea", "Oolong", "Matcha"], correct: 0 },
+    { q: "What is the traditional name for a hospitality gathering place?", options: ["Bait", "Majlis", "Souq", "Dhow"], correct: 1 },
+    { q: "True or False: Falconry is an UNESCO-recognized heritage in Qatar.", options: ["True", "False"], correct: 0 },
+    { q: "The Qatari flag features which two colors?", options: ["Red/White", "Green/White", "Maroon/White", "Gold/White"], correct: 2 },
+    { q: "True or False: Hospitality (Karam) is a core Qatari value.", options: ["True", "False"], correct: 0 },
 
-    // 4 TRUE/FALSE: 2026 DESTINATION
-    { q: "By 2026, Doha is officially the 'GCC Tourism Capital'.", options: ["True", "False"], correct: 0 },
-    { q: "Qatar's 'Hayya' platform is being phased out for a traditional paper visa system in 2026.", options: ["True", "False"], correct: 1 },
-    { q: "Doha has more Michelin-starred restaurants per capita than London in 2026.", options: ["True", "False"], correct: 0 },
-    { q: "By 2026, the Doha Metro is the world's longest fully-automated system.", options: ["True", "False"], correct: 0 }
+    // THE 4: 2026 VISION
+    { q: "True or False: Qatar is the GCC Tourism Capital for 2026.", options: ["True", "False"], correct: 0 },
+    { q: "Is the Doha Metro a fully automated driverless system?", options: ["Yes", "No"], correct: 0 },
+    { q: "True or False: Qatar offers visa-free entry to 100+ nations in 2026.", options: ["True", "False"], correct: 0 },
+    { q: "Is Qatar ranked as the safest country in the world for 2026?", options: ["Yes", "No"], correct: 0 }
 ];
 
-let cur = 0, score = 0, active = true, first = true;
+let curIdx = 0;
+let totalScore = 0;
+let isClickable = true;
+let isFirstTry = true;
 
-function load() {
-    const q = data[cur];
-    document.getElementById("pbar").style.width = (cur / 20 * 100) + "%";
-    document.getElementById("sect").innerText = cur < 9 ? "9 LANDMARKS" : (cur < 16 ? "7 CULTURAL INSIGHTS" : "4 TOURISM VISION 2026");
-    document.getElementById("qtext").innerText = q.q;
-    const cont = document.getElementById("opts");
-    cont.innerHTML = "";
-    active = true; first = true;
-    q.options.forEach((o, i) => {
-        const b = document.createElement("button");
-        b.className = "opt-btn";
-        b.innerText = o;
-        b.onclick = () => check(i, b);
-        cont.appendChild(b);
+function updateUI() {
+    const data = quizData[curIdx];
+    document.getElementById("fill").style.width = (curIdx / 20 * 100) + "%";
+    
+    // Check for Section Transitions
+    if (curIdx === 9 && document.getElementById("milestone-ui").style.display !== "block") {
+        showMilestone("The 9 Landmarks Complete!", "Great job! You've mastered the geography. Ready for 'The 7' Cultural traditions?");
+        return;
+    }
+    if (curIdx === 16 && document.getElementById("milestone-ui").style.display !== "block") {
+        showMilestone("The 7 Traditions Complete!", "Your cultural knowledge is excellent. Ready for the final '4' Vision 2026 questions?");
+        return;
+    }
+
+    document.getElementById("game-ui").style.display = "block";
+    document.getElementById("milestone-ui").style.display = "none";
+    
+    document.getElementById("sect-label").innerText = curIdx < 9 ? "Section 1: The 9 Landmarks" : (curIdx < 16 ? "Section 2: The 7 Traditions" : "Section 3: The 4 Vision");
+    document.getElementById("q-text").innerText = data.q;
+    
+    const container = document.getElementById("opt-container");
+    container.innerHTML = "";
+    isClickable = true;
+    isFirstTry = true;
+
+    data.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.className = "opt-btn";
+        btn.innerText = opt;
+        btn.onclick = () => handleChoice(i, btn);
+        container.appendChild(btn);
     });
 }
 
-function check(i, b) {
-    if (!active) return;
-    const q = data[cur];
-    if (i === q.correct) {
-        b.classList.add("correct");
-        if (first) score++;
-        active = false;
+function handleChoice(idx, btn) {
+    if (!isClickable) return;
+    const data = quizData[curIdx];
+    
+    if (idx === data.correct) {
+        btn.classList.add("correct");
+        if (isFirstTry) totalScore++;
+        isClickable = false;
         setTimeout(() => {
-            cur++;
-            if (cur < data.length) load();
-            else finish();
-        }, 1000);
+            curIdx++;
+            if (curIdx < quizData.length) updateUI();
+            else showFinal();
+        }, 800);
     } else {
-        b.classList.add("wrong");
-        first = false;
-        document.querySelectorAll(".opt-btn")[q.correct].classList.add("highlight");
+        btn.classList.add("wrong");
+        isFirstTry = false;
+        document.querySelectorAll(".opt-btn")[data.correct].classList.add("highlight");
+        isClickable = false;
+        setTimeout(() => {
+            curIdx++;
+            if (curIdx < quizData.length) updateUI();
+            else showFinal();
+        }, 1600);
     }
 }
 
-function finish() {
-    document.getElementById("game").style.display = "none";
-    document.getElementById("result").style.display = "block";
-    document.getElementById("fscore").innerText = score;
-    document.getElementById("pbar").style.width = "100%";
+function showMilestone(title, msg) {
+    document.getElementById("game-ui").style.display = "none";
+    const milestone = document.getElementById("milestone-ui");
+    milestone.style.display = "block";
+    document.getElementById("milestone-title").innerText = title;
+    document.getElementById("milestone-msg").innerText = msg;
+    document.getElementById("current-score-display").innerText = `Current Score: ${totalScore}/${curIdx}`;
 }
 
-load();
+function startNextSection() {
+    document.getElementById("milestone-ui").style.display = "none";
+    updateUI();
+}
+
+function showFinal() {
+    document.getElementById("game-ui").style.display = "none";
+    document.getElementById("final-ui").style.display = "block";
+    document.getElementById("final-score-display").innerText = `${totalScore} / 20`;
+    document.getElementById("fill").style.width = "100%";
+}
+
+updateUI();
 </script>
 </body>
 </html>
