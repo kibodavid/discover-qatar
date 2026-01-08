@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>974 Journey: Tourism Edition</title>
+    <title>974 Journey: The Final Destination</title>
     <style>
         :root { --maroon: #8D1B3D; --gold: #D4AF37; --green: #28a745; --red: #dc3545; --bg: #f8f9fa; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -19,11 +19,12 @@
         .correct { background: var(--green) !important; color: white !important; border-color: var(--green) !important; }
         .wrong { background: var(--red) !important; color: white !important; border-color: var(--red) !important; }
         .highlight { background: var(--gold) !important; color: white !important; border-color: var(--gold) !important; }
-        .milestone-screen { display: none; text-align: center; padding: 40px 25px; }
+        .screen { display: none; text-align: center; padding: 40px 25px; }
+        .score-big { font-size: 3.5rem; font-weight: bold; color: var(--maroon); margin: 5px 0; }
         .action-btn { background: var(--maroon); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1.1rem; }
         .progress-container { height: 6px; background: #eee; width: 100%; }
         .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: 0.5s; }
-        .score-big { font-size: 3rem; font-weight: bold; color: var(--maroon); margin: 10px 0; }
+        .cta-box { background: #fff9e6; border-radius: 12px; padding: 20px; margin-top: 20px; border: 1px solid var(--gold); }
     </style>
 </head>
 <body>
@@ -32,7 +33,7 @@
     <div class="header"><h2 style="margin:0">974 Journey</h2></div>
     <div class="progress-container"><div class="progress-fill" id="fill"></div></div>
 
-    <div id="game-ui">
+    <div id="game-ui" class="screen" style="display:block; text-align:left;">
         <div class="quiz-body">
             <div class="hud">
                 <div id="sect-label" class="section-tag">Section</div>
@@ -43,35 +44,39 @@
         </div>
     </div>
 
-    <div id="milestone-ui" class="milestone-screen">
+    <div id="milestone-ui" class="screen">
         <h2 id="m-title">Section Results</h2>
-        <p id="m-msg">Great progress!</p>
         <div class="score-big" id="m-score">0 / 0</div>
-        <button class="action-btn" id="next-btn">Enter Next Section →</button>
+        <p id="m-msg">Excellent Progress!</p>
+        <button class="action-btn" id="next-btn">Unlock Next Section →</button>
     </div>
 
-    <div id="final-ui" class="milestone-screen">
-        <h2 style="color: var(--maroon)">Mubarak!</h2>
-        <p>Total Expertise Score:</p>
-        <div class="score-big" id="f-score" style="color: var(--gold)">0 / 20</div>
-        <button class="action-btn" onclick="location.reload()">Try Again</button>
+    <div id="final-ui" class="screen">
+        <h2 style="color: var(--maroon); margin-bottom: 5px;">Mubarak! 🇶🇦</h2>
+        <p style="margin-top:0;">Thank you for exploring with us.</p>
+        <p style="font-size: 0.9rem; font-weight: bold; color: #666; text-transform: uppercase;">Total Mastery Score</p>
+        <div class="score-big" id="f-score" style="color: var(--gold); margin-bottom: 20px;">0 / 20</div>
+        
+        <div class="cta-box">
+            <h3 style="margin:0; color: var(--maroon);">Ready for the real journey?</h3>
+            <p style="font-size: 0.95rem; line-height: 1.5; color: #444;">From the architectural marvels of the West Bay to the golden sands of Khor Al Adaid, Qatar is world-renowned as the safest and most welcoming destination for 2026. Don't just play the game—experience the hospitality, the culture, and the future. <strong>Your desert adventure awaits!</strong></p>
+        </div>
+
+        <button class="action-btn" onclick="location.reload()">Restart Journey</button>
     </div>
 </div>
 
 <script>
 const quizData = [
-    // 9 LANDMARKS
     { q: "Qatar is officially the second flattest country in the world. What is the elevation of its highest peak?", options: ["103m", "500m", "12m", "240m"], correct: 0 },
-    { q: "Which historic site is known as the 'Standing Market' due to its ancient trading roots?", options: ["Villaggio", "Msheireb", "Souq Waqif", "Katara"], correct: 2 },
+    { q: "Which historic site is known as the 'Standing Market' due to its traditional trading roots?", options: ["Villaggio", "Msheireb", "Souq Waqif", "Katara"], correct: 2 },
     { q: "The Riviera-style artificial island in the north is designed to resemble which local treasure?", options: ["A Falcon Wing", "A Dhow Boat", "A string of gems", "A Desert Rose"], correct: 2 },
     { q: "Where can you find the Venice-inspired 'Qanat Quartier' canals?", options: ["Lusail", "The Pearl", "Al Khor", "Al Wakrah"], correct: 1 },
     { q: "Jean Nouvel's architectural masterpiece on the Corniche mimics which mineral crystal?", options: ["Desert Rose", "Quartz Rose", "Sand Lily", "Salt Star"], correct: 0 },
     { q: "The 300-meter skyscraper known as 'The Torch' is located in which sports complex?", options: ["Education City", "Lusail Plaza", "Aspire Zone", "West Bay"], correct: 2 },
-    { q: "Which city is home to the crescent-shaped 'Iconic Towers' housing luxury hotels?", options: ["Al Rayyan", "Lusail", "Dukhan", "Msheireb"], correct: 1 },
-    { q: "Where is the 'Inland Sea' located, where the tide moves deep into the desert dunes?", options: ["Zekreet", "Khor Al Adaid", "Fuwairit", "Al Thakhira"], correct: 1 },
+    { q: "Which futuristic city is home to the crescent-shaped 'Iconic Towers' housing luxury hotels?", options: ["Al Rayyan", "Lusail", "Dukhan", "Msheireb"], correct: 1 },
+    { q: "Where is the rare 'Inland Sea' located, where the tide moves deep into the desert dunes?", options: ["Zekreet", "Khor Al Adaid", "Fuwairit", "Al Thakhira"], correct: 1 },
     { q: "Which museum sits on its own reclaimed island and was designed by I.M. Pei?", options: ["National Museum", "Mathaf", "Museum of Islamic Art", "3-2-1 Sports Museum"], correct: 2 },
-
-    // 7 CULTURE
     { q: "The majestic Arabian Oryx is distinguished primarily by its:", options: ["Golden coat", "Long straight horns", "Ability to swim", "Falcon-like speed"], correct: 1 },
     { q: "Which traditional spiced rice dish is served as the centerpiece of hospitality?", options: ["Majboos", "Kousa Mahshi", "Tabbouleh", "Fattoush"], correct: 0 },
     { q: "The popular 'street-side' tea flavored with cardamom and evaporated milk is called:", options: ["Sulaimani", "Gahwa", "Karak", "Loomi"], correct: 2 },
@@ -79,44 +84,44 @@ const quizData = [
     { q: "True or False: The ancient art of training birds of prey is recognized by UNESCO.", options: ["True", "False"], correct: 0 },
     { q: "The nine serrated edges on the national colors represent which historic treaty?", options: ["1916 Treaty", "1971 Independence", "Gulf Cooperation", "Maritime Peace"], correct: 0 },
     { q: "Which Bedouin hand-weaving technique is used to create traditional tents?", options: ["Al-Sadu", "Al-Ghazal", "Al-Khous", "Al-Bisht"], correct: 0 },
-
-    // 4 VISION 2026
     { q: "True or False: Doha has been officially designated the GCC Tourism Capital for 2026.", options: ["True", "False"], correct: 0 },
     { q: "Which transport system allows visitors to reach every stadium and mall driverlessly?", options: ["The Metro", "The Monorail", "The Tram", "The Lusail Ferry"], correct: 0 },
     { q: "True or False: Over 100 countries can now visit the destination without a prior visa.", options: ["True", "False"], correct: 0 },
     { q: "True or False: The country maintains its rank as the #1 Safest Country in the world for 2026.", options: ["True", "False"], correct: 0 }
 ];
 
-let curIdx = 0, totalScore = 0, sectionScore = 0, canClick = true, firstTry = true;
+let curIdx = 0, totalScore = 0, sectionScore = 0, canClick = true;
 
 const gameUI = document.getElementById("game-ui");
 const milestoneUI = document.getElementById("milestone-ui");
+const finalUI = document.getElementById("final-ui");
 const nextBtn = document.getElementById("next-btn");
 
-nextBtn.addEventListener("click", () => {
-    milestoneUI.style.display = "none";
-    gameUI.style.display = "block";
-    sectionScore = 0; // Reset section score for next part
-    loadQuestion();
-});
+nextBtn.onclick = () => {
+    if (curIdx === 20) {
+        milestoneUI.style.display = "none";
+        finalUI.style.display = "block";
+    } else {
+        milestoneUI.style.display = "none";
+        gameUI.style.display = "block";
+        sectionScore = 0;
+        loadQuestion();
+    }
+};
 
 function loadQuestion() {
     const d = quizData[curIdx];
     let sectLabel = "", progNum = 0, sectTotal = 0;
-
-    if (curIdx < 9) { sectLabel = "The 9: Landmarks"; progNum = curIdx + 1; sectTotal = 9; }
-    else if (curIdx < 16) { sectLabel = "The 7: Culture"; progNum = curIdx - 8; sectTotal = 7; }
-    else { sectLabel = "The 4: 2026 Vision"; progNum = curIdx - 15; sectTotal = 4; }
-
+    if (curIdx < 9) { sectLabel = "1. Landmarks"; progNum = curIdx + 1; sectTotal = 9; }
+    else if (curIdx < 16) { sectLabel = "2. Culture"; progNum = curIdx - 8; sectTotal = 7; }
+    else { sectLabel = "3. Vision 2026"; progNum = curIdx - 15; sectTotal = 4; }
     document.getElementById("sect-label").innerText = sectLabel;
     document.getElementById("prog-count").innerText = `${progNum} / ${sectTotal}`;
     document.getElementById("fill").style.width = (progNum / sectTotal * 100) + "%";
     document.getElementById("q-text").innerText = d.q;
-
     const cont = document.getElementById("opt-container");
     cont.innerHTML = "";
-    canClick = true; firstTry = true;
-
+    canClick = true;
     d.options.forEach((opt, i) => {
         const btn = document.createElement("button");
         btn.className = "opt-btn";
@@ -129,46 +134,37 @@ function loadQuestion() {
 function check(i, btn) {
     if (!canClick) return;
     const d = quizData[curIdx];
+    canClick = false;
     if (i === d.correct) {
         btn.classList.add("correct");
-        if (firstTry) { totalScore++; sectionScore++; }
-        canClick = false;
-        setTimeout(() => {
-            curIdx++;
-            checkTransitions();
-        }, 800);
+        totalScore++; sectionScore++;
+        setTimeout(advance, 800);
     } else {
         btn.classList.add("wrong");
-        firstTry = false;
         document.querySelectorAll(".opt-btn")[d.correct].classList.add("highlight");
-        canClick = false;
-        setTimeout(() => {
-            curIdx++;
-            checkTransitions();
-        }, 1600);
+        setTimeout(advance, 1600);
     }
 }
 
-function checkTransitions() {
-    if (curIdx === 9) showMilestone(9);
-    else if (curIdx === 16) showMilestone(7);
-    else if (curIdx === 20) showMilestone(4);
-    else if (curIdx < quizData.length) loadQuestion();
+function advance() {
+    curIdx++;
+    if (curIdx === 9) showMilestone("Landmarks Mastery", 9);
+    else if (curIdx === 16) showMilestone("Cultural Wisdom", 7);
+    else if (curIdx === 20) showMilestone("Future Vision", 4);
+    else loadQuestion();
 }
 
-function showMilestone(total) {
-    if (curIdx === 20) { showFinal(); return; }
+function showMilestone(title, total) {
     gameUI.style.display = "none";
     milestoneUI.style.display = "block";
+    document.getElementById("m-title").innerText = title;
     document.getElementById("m-score").innerText = `${sectionScore} / ${total}`;
-    document.getElementById("m-msg").innerText = sectionScore > (total/2) ? "Excellent knowledge!" : "Keep learning about Qatar!";
-}
-
-function showFinal() {
-    gameUI.style.display = "none";
-    milestoneUI.style.display = "none";
-    document.getElementById("final-ui").style.display = "block";
-    document.getElementById("f-score").innerText = `${totalScore} / 20`;
+    if (curIdx === 20) {
+        nextBtn.innerText = "Complete Your Journey →";
+        document.getElementById("f-score").innerText = `${totalScore} / 20`;
+    } else {
+        nextBtn.innerText = "Unlock Next Section →";
+    }
 }
 
 loadQuestion();
