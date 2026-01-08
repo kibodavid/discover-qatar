@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>974 Journey: Refined Edition</title>
+    <title>974 Journey: Tourism Edition</title>
     <style>
         :root { --maroon: #8D1B3D; --gold: #D4AF37; --green: #28a745; --red: #dc3545; --bg: #f8f9fa; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -23,6 +23,7 @@
         .action-btn { background: var(--maroon); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1.1rem; }
         .progress-container { height: 6px; background: #eee; width: 100%; }
         .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: 0.5s; }
+        .score-big { font-size: 3rem; font-weight: bold; color: var(--maroon); margin: 10px 0; }
     </style>
 </head>
 <body>
@@ -43,50 +44,50 @@
     </div>
 
     <div id="milestone-ui" class="milestone-screen">
-        <h2 id="m-title">Section Complete</h2>
-        <p id="m-msg"></p>
-        <div style="font-size: 1.5rem; font-weight: bold; color: var(--maroon);" id="m-score"></div>
-        <button class="action-btn" id="next-btn">Unlock Next Section →</button>
+        <h2 id="m-title">Section Results</h2>
+        <p id="m-msg">Great progress!</p>
+        <div class="score-big" id="m-score">0 / 0</div>
+        <button class="action-btn" id="next-btn">Enter Next Section →</button>
     </div>
 
     <div id="final-ui" class="milestone-screen">
         <h2 style="color: var(--maroon)">Mubarak!</h2>
-        <p>You have mastered the 9-7-4 Challenge.</p>
-        <div style="font-size: 2.5rem; font-weight: bold; color: var(--gold);" id="f-score"></div>
-        <button class="action-btn" onclick="location.reload()">Restart</button>
+        <p>Total Expertise Score:</p>
+        <div class="score-big" id="f-score" style="color: var(--gold)">0 / 20</div>
+        <button class="action-btn" onclick="location.reload()">Try Again</button>
     </div>
 </div>
 
 <script>
 const quizData = [
     // 9 LANDMARKS
-    { q: "This country is officially the second flattest in the world. What is its highest point?", options: ["103 Meters", "500 Meters", "12 Meters", "850 Meters"], correct: 0 },
-    { q: "Which market is the historic 'Standing Market' known for its traditional architecture?", options: ["Mall of Qatar", "Souq Waqif", "Villaggio", "City Center"], correct: 1 },
-    { q: "The artificial island 'The Pearl' is shaped like what historic local treasure?", options: ["A Falcon's wing", "A Dhow boat", "A string of pearls", "A Desert Rose"], correct: 2 },
-    { q: "Where can you find the Venice-inspired district called Qanat Quartier?", options: ["Msheireb", "The Pearl", "Lusail City", "Katara"], correct: 1 },
-    { q: "The National Museum's design by Jean Nouvel is inspired by which crystal?", options: ["Quartz", "Desert Rose", "Amethyst", "Emerald"], correct: 1 },
-    { q: "Which skyline is famous for the 300-meter 'Torch Tower'?", options: ["West Bay", "Lusail", "Aspire Zone", "The Pearl"], correct: 2 },
-    { q: "Which futuristic city features the iconic Katara Towers (crescent-shaped)?", options: ["Al Rayyan", "Al Wakrah", "Lusail City", "Msheireb"], correct: 2 },
-    { q: "Where is the rare 'Inland Sea' (Khor Al Adaid) where desert meets water?", options: ["North Coast", "Southeast Border", "West Coast", "Near the Airport"], correct: 1 },
-    { q: "Which museum is located on its own man-made island at the end of the Corniche?", options: ["National Museum", "Mathaf", "Museum of Islamic Art", "Fire Station"], correct: 2 },
+    { q: "Qatar is officially the second flattest country in the world. What is the elevation of its highest peak?", options: ["103m", "500m", "12m", "240m"], correct: 0 },
+    { q: "Which historic site is known as the 'Standing Market' due to its ancient trading roots?", options: ["Villaggio", "Msheireb", "Souq Waqif", "Katara"], correct: 2 },
+    { q: "The Riviera-style artificial island in the north is designed to resemble which local treasure?", options: ["A Falcon Wing", "A Dhow Boat", "A string of gems", "A Desert Rose"], correct: 2 },
+    { q: "Where can you find the Venice-inspired 'Qanat Quartier' canals?", options: ["Lusail", "The Pearl", "Al Khor", "Al Wakrah"], correct: 1 },
+    { q: "Jean Nouvel's architectural masterpiece on the Corniche mimics which mineral crystal?", options: ["Desert Rose", "Quartz Rose", "Sand Lily", "Salt Star"], correct: 0 },
+    { q: "The 300-meter skyscraper known as 'The Torch' is located in which sports complex?", options: ["Education City", "Lusail Plaza", "Aspire Zone", "West Bay"], correct: 2 },
+    { q: "Which city is home to the crescent-shaped 'Iconic Towers' housing luxury hotels?", options: ["Al Rayyan", "Lusail", "Dukhan", "Msheireb"], correct: 1 },
+    { q: "Where is the 'Inland Sea' located, where the tide moves deep into the desert dunes?", options: ["Zekreet", "Khor Al Adaid", "Fuwairit", "Al Thakhira"], correct: 1 },
+    { q: "Which museum sits on its own reclaimed island and was designed by I.M. Pei?", options: ["National Museum", "Mathaf", "Museum of Islamic Art", "3-2-1 Sports Museum"], correct: 2 },
 
     // 7 CULTURE
-    { q: "What is the national animal known for its majestic white coat and long horns?", options: ["Sand Gazelle", "Arabian Oryx", "Desert Camel", "Golden Falcon"], correct: 1 },
-    { q: "Which spiced rice dish is considered the national staple?", options: ["Majboos", "Shawarma", "Hummus", "Biryani"], correct: 0 },
-    { q: "What is the name of the popular cardamom-spiced tea served with milk?", options: ["Gahwa", "Karak", "Loomi", "Sulaimani"], correct: 1 },
-    { q: "The traditional room used for welcoming and hosting guests is called a:", options: ["Bait", "Majlis", "Souq", "Sadu"], correct: 1 },
-    { q: "True or False: Falconry has been part of the local lifestyle for over 4,000 years.", options: ["True", "False"], correct: 0 },
-    { q: "The nine serrated points on the national flag represent its status as the 9th member of which treaty?", options: ["1916 Reconciled Emirates", "UN Charter", "Gulf Union", "League of Nations"], correct: 0 },
-    { q: "What is the name of the traditional weaving art practiced by Bedouin women?", options: ["Karak", "Sadu", "Bisht", "Oud"], correct: 1 },
+    { q: "The majestic Arabian Oryx is distinguished primarily by its:", options: ["Golden coat", "Long straight horns", "Ability to swim", "Falcon-like speed"], correct: 1 },
+    { q: "Which traditional spiced rice dish is served as the centerpiece of hospitality?", options: ["Majboos", "Kousa Mahshi", "Tabbouleh", "Fattoush"], correct: 0 },
+    { q: "The popular 'street-side' tea flavored with cardamom and evaporated milk is called:", options: ["Sulaimani", "Gahwa", "Karak", "Loomi"], correct: 2 },
+    { q: "What is the name of the social space used for hosting and intellectual discussion?", options: ["Sadu", "Majlis", "Bisht", "Oud"], correct: 1 },
+    { q: "True or False: The ancient art of training birds of prey is recognized by UNESCO.", options: ["True", "False"], correct: 0 },
+    { q: "The nine serrated edges on the national colors represent which historic treaty?", options: ["1916 Treaty", "1971 Independence", "Gulf Cooperation", "Maritime Peace"], correct: 0 },
+    { q: "Which Bedouin hand-weaving technique is used to create traditional tents?", options: ["Al-Sadu", "Al-Ghazal", "Al-Khous", "Al-Bisht"], correct: 0 },
 
     // 4 VISION 2026
-    { q: "True or False: Doha is officially named the GCC Tourism Capital for 2026.", options: ["True", "False"], correct: 0 },
-    { q: "Which record-breaking driverless transport system connects the main city hubs in 2026?", options: ["The Metro", "The Tram", "The Monorail", "The Hyperloop"], correct: 0 },
-    { q: "True or False: Over 100 nationalities can enter the country visa-free in 2026.", options: ["True", "False"], correct: 0 },
-    { q: "True or False: The country is ranked as the #1 Safest Country in the world for 2026.", options: ["True", "False"], correct: 0 }
+    { q: "True or False: Doha has been officially designated the GCC Tourism Capital for 2026.", options: ["True", "False"], correct: 0 },
+    { q: "Which transport system allows visitors to reach every stadium and mall driverlessly?", options: ["The Metro", "The Monorail", "The Tram", "The Lusail Ferry"], correct: 0 },
+    { q: "True or False: Over 100 countries can now visit the destination without a prior visa.", options: ["True", "False"], correct: 0 },
+    { q: "True or False: The country maintains its rank as the #1 Safest Country in the world for 2026.", options: ["True", "False"], correct: 0 }
 ];
 
-let curIdx = 0, totalScore = 0, canClick = true, firstTry = true;
+let curIdx = 0, totalScore = 0, sectionScore = 0, canClick = true, firstTry = true;
 
 const gameUI = document.getElementById("game-ui");
 const milestoneUI = document.getElementById("milestone-ui");
@@ -95,6 +96,7 @@ const nextBtn = document.getElementById("next-btn");
 nextBtn.addEventListener("click", () => {
     milestoneUI.style.display = "none";
     gameUI.style.display = "block";
+    sectionScore = 0; // Reset section score for next part
     loadQuestion();
 });
 
@@ -102,11 +104,11 @@ function loadQuestion() {
     const d = quizData[curIdx];
     let sectLabel = "", progNum = 0, sectTotal = 0;
 
-    if (curIdx < 9) { sectLabel = "Landmarks"; progNum = curIdx + 1; sectTotal = 9; }
-    else if (curIdx < 16) { sectLabel = "Culture"; progNum = curIdx - 8; sectTotal = 7; }
-    else { sectLabel = "Vision 2026"; progNum = curIdx - 15; sectTotal = 4; }
+    if (curIdx < 9) { sectLabel = "The 9: Landmarks"; progNum = curIdx + 1; sectTotal = 9; }
+    else if (curIdx < 16) { sectLabel = "The 7: Culture"; progNum = curIdx - 8; sectTotal = 7; }
+    else { sectLabel = "The 4: 2026 Vision"; progNum = curIdx - 15; sectTotal = 4; }
 
-    document.getElementById("sect-label").innerText = `Section: ${sectLabel}`;
+    document.getElementById("sect-label").innerText = sectLabel;
     document.getElementById("prog-count").innerText = `${progNum} / ${sectTotal}`;
     document.getElementById("fill").style.width = (progNum / sectTotal * 100) + "%";
     document.getElementById("q-text").innerText = d.q;
@@ -129,13 +131,11 @@ function check(i, btn) {
     const d = quizData[curIdx];
     if (i === d.correct) {
         btn.classList.add("correct");
-        if (firstTry) totalScore++;
+        if (firstTry) { totalScore++; sectionScore++; }
         canClick = false;
         setTimeout(() => {
             curIdx++;
-            if (curIdx === 9 || curIdx === 16) showMilestone();
-            else if (curIdx < quizData.length) loadQuestion();
-            else showFinal();
+            checkTransitions();
         }, 800);
     } else {
         btn.classList.add("wrong");
@@ -144,23 +144,29 @@ function check(i, btn) {
         canClick = false;
         setTimeout(() => {
             curIdx++;
-            if (curIdx === 9 || curIdx === 16) showMilestone();
-            else if (curIdx < quizData.length) loadQuestion();
-            else showFinal();
+            checkTransitions();
         }, 1600);
     }
 }
 
-function showMilestone() {
+function checkTransitions() {
+    if (curIdx === 9) showMilestone(9);
+    else if (curIdx === 16) showMilestone(7);
+    else if (curIdx === 20) showMilestone(4);
+    else if (curIdx < quizData.length) loadQuestion();
+}
+
+function showMilestone(total) {
+    if (curIdx === 20) { showFinal(); return; }
     gameUI.style.display = "none";
     milestoneUI.style.display = "block";
-    document.getElementById("m-title").innerText = "Section Complete!";
-    document.getElementById("m-msg").innerText = "You've unlocked the next chapter of the 974 Journey.";
-    document.getElementById("m-score").innerText = `Score: ${totalScore} / ${curIdx}`;
+    document.getElementById("m-score").innerText = `${sectionScore} / ${total}`;
+    document.getElementById("m-msg").innerText = sectionScore > (total/2) ? "Excellent knowledge!" : "Keep learning about Qatar!";
 }
 
 function showFinal() {
     gameUI.style.display = "none";
+    milestoneUI.style.display = "none";
     document.getElementById("final-ui").style.display = "block";
     document.getElementById("f-score").innerText = `${totalScore} / 20`;
 }
