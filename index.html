@@ -7,7 +7,7 @@
     <style>
         :root { --maroon: #8D1B3D; --gold: #D4AF37; --green: #28a745; --red: #dc3545; --bg: #f8f9fa; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .app-card { background: white; width: 92%; max-width: 450px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-top: 10px solid var(--maroon); overflow: hidden; }
+        .app-card { background: white; width: 92%; max-width: 450px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-top: 10px solid var(--maroon); overflow: hidden; position: relative; }
         .header { background: var(--maroon); color: white; padding: 20px; text-align: center; }
         .quiz-body { padding: 30px; }
         .hud { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
@@ -22,6 +22,11 @@
         .screen { display: none; text-align: center; padding: 40px 25px; }
         .score-big { font-size: 3.5rem; font-weight: bold; color: var(--maroon); margin: 5px 0; }
         .action-btn { background: var(--maroon); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1.1rem; }
+        .share-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .social-btn { padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+        .li-btn { background: #0077b5; }
+        .wa-btn { background: #25d366; }
+        .x-btn { background: #000; }
         .share-btn { background: white; color: var(--maroon); border: 2px solid var(--maroon); padding: 12px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; font-size: 1rem; }
         .progress-container { height: 6px; background: #eee; width: 100%; }
         .progress-fill { height: 100%; background: var(--gold); width: 0%; transition: 0.5s; }
@@ -34,7 +39,20 @@
     <div class="header"><h2 style="margin:0">974 Journey</h2></div>
     <div class="progress-container"><div class="progress-fill" id="fill"></div></div>
 
-    <div id="game-ui" class="screen" style="display:block; text-align:left;">
+    <div id="intro-ui" class="screen" style="display:block;">
+        <h2 style="color: var(--maroon);">Welcome to Qatar 2026</h2>
+        <p>Embark on an interactive journey through the landmarks, culture, and future vision of the world's leading destination.</p>
+        <div class="cta-box" style="text-align:left;">
+            <ul style="margin:0; padding-left:20px; font-size:0.9rem; color:#444;">
+                <li>Explore 9 Global Landmarks</li>
+                <li>Discover 7 Cultural Traditions</li>
+                <li>Unlock the 2026 Vision</li>
+            </ul>
+        </div>
+        <button class="action-btn" onclick="startJourney()">Begin the Experience →</button>
+    </div>
+
+    <div id="game-ui" class="screen" style="text-align:left;">
         <div class="quiz-body">
             <div class="hud">
                 <div id="sect-label" class="section-tag">Section</div>
@@ -54,18 +72,25 @@
 
     <div id="final-ui" class="screen">
         <h2 style="color: var(--maroon); margin-bottom: 5px;">Mubarak! 🇶🇦</h2>
-        <p style="margin-top:0;">Thank you for exploring Qatar's wonders with us.</p>
+        <p style="margin-top:0;">Thank you for exploring Qatar's wonders.</p>
         <div class="score-big" id="f-score" style="color: var(--gold);">0 / 20</div>
         
         <div class="cta-box">
             <h3 style="margin:0; color: var(--maroon);">The World's Best Destination</h3>
-            <p style="font-size: 0.95rem; line-height: 1.5; color: #444;">From the architectural marvels of the Middle East to the safe streets of Doha, Qatar is the ultimate travel experience for 2026. <strong>Experience the future of tourism today!</strong></p>
+            <p style="font-size: 0.95rem; line-height: 1.5; color: #444;">From the architectural marvels of the Middle East to the safe streets of Doha, Qatar is the ultimate travel experience.</p>
         </div>
 
-        <button class="action-btn" id="share-link">Explore with Friends 🔗</button>
-        <button class="share-btn" onclick="location.reload()">Try Again</button>
+        <p style="margin-bottom:10px; font-weight:bold; color:var(--maroon); font-size:0.9rem;">Share your journey with the world:</p>
+        <div class="share-grid">
+            <button class="social-btn li-btn" onclick="socialShare('li')">LinkedIn</button>
+            <button class="social-btn wa-btn" onclick="socialShare('wa')">WhatsApp</button>
+            <button class="social-btn x-btn" onclick="socialShare('x')">X</button>
+        </div>
+        <button class="share-btn" onclick="location.reload()">Restart Journey</button>
     </div>
 </div>
+
+
 
 <script>
 const quizData = [
@@ -98,10 +123,17 @@ const quizData = [
 
 let curIdx = 0, totalScore = 0, sectionScore = 0, canClick = true;
 
+const introUI = document.getElementById("intro-ui");
 const gameUI = document.getElementById("game-ui");
 const milestoneUI = document.getElementById("milestone-ui");
 const finalUI = document.getElementById("final-ui");
 const nextBtn = document.getElementById("next-btn");
+
+function startJourney() {
+    introUI.style.display = "none";
+    gameUI.style.display = "block";
+    loadQuestion();
+}
 
 nextBtn.onclick = () => {
     if (curIdx === 20) {
@@ -115,11 +147,17 @@ nextBtn.onclick = () => {
     }
 };
 
-document.getElementById("share-link").onclick = () => {
-    navigator.clipboard.writeText(window.location.href);
-    document.getElementById("share-link").innerText = "Link Copied! ✅";
-    setTimeout(() => { document.getElementById("share-link").innerText = "Explore with Friends 🔗"; }, 2000);
-};
+function socialShare(platform) {
+    const text = `I just scored ${totalScore}/20 on the 974 Journey! Explore Qatar's 2026 wonders here: `;
+    const url = window.location.href;
+    let shareUrl = '';
+    
+    if(platform === 'li') shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    if(platform === 'wa') shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + url)}`;
+    if(platform === 'x') shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    
+    window.open(shareUrl, '_blank');
+}
 
 function loadQuestion() {
     const d = quizData[curIdx];
@@ -178,8 +216,6 @@ function showMilestone(title, total) {
         nextBtn.innerText = "Unlock Next Section →";
     }
 }
-
-loadQuestion();
 </script>
 </body>
 </html>
